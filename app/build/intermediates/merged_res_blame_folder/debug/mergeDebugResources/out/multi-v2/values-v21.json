@@ -1,0 +1,47 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.pfservices.telefeshield.app-mergeDebugResources-10:/values-v21/values-v21.xml",
+            "map": [
+                {
+                    "source": "/home/codespace/.gradle/caches/9.7.1/transforms/05ef3213b2498da8d9bf77de25ebb8bc/transformed/media3-ui-1.8.0/res/values-v21/values-v21.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,114",
+                        "endLines": "2,7",
+                        "endColumns": "58,10",
+                        "endOffsets": "109,396"
+                    },
+                    "to": {
+                        "startLines": "3,7",
+                        "startColumns": "4,4",
+                        "startOffsets": "173,427",
+                        "endLines": "3,11",
+                        "endColumns": "58,10",
+                        "endOffsets": "227,709"
+                    }
+                },
+                {
+                    "source": "/home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/res/values-v21/values-v21.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,13",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,173,237,304,368,484,610,736,864,1036",
+                        "endLines": "2,3,4,5,6,7,8,9,12,17",
+                        "endColumns": "117,63,66,63,115,125,125,127,12,12",
+                        "endOffsets": "168,232,299,363,479,605,731,859,1031,1383"
+                    },
+                    "to": {
+                        "startLines": "2,4,5,6,12,13,14,15,16,19",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,232,296,363,714,830,956,1082,1210,1382",
+                        "endLines": "2,4,5,6,12,13,14,15,18,23",
+                        "endColumns": "117,63,66,63,115,125,125,127,12,12",
+                        "endOffsets": "168,291,358,422,825,951,1077,1205,1377,1729"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+com.pfservices.telefeshield.app-media3-ui-1.8.0-0 /home/codespace/.gradle/caches/9.7.1/transforms/05ef3213b2498da8d9bf77de25ebb8bc/transformed/media3-ui-1.8.0/res
+com.pfservices.telefeshield.app-core-1.8.0-1 /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/res
+com.pfservices.telefeshield.app-annotation-experimental-1.3.1-2 /home/codespace/.gradle/caches/9.7.1/transforms/3233b566033325331af45dd6f5cd4bfb/transformed/annotation-experimental-1.3.1/res
+com.pfservices.telefeshield.app-media3-exoplayer-1.8.0-3 /home/codespace/.gradle/caches/9.7.1/transforms/5295f0dfb46701489f4e3398b4442893/transformed/media3-exoplayer-1.8.0/res
+com.pfservices.telefeshield.app-customview-poolingcontainer-1.0.0-4 /home/codespace/.gradle/caches/9.7.1/transforms/840cb73b9663aa90d14e8d4b29b946e6/transformed/customview-poolingcontainer-1.0.0/res
+com.pfservices.telefeshield.app-lifecycle-runtime-2.3.1-5 /home/codespace/.gradle/caches/9.7.1/transforms/9ff976a8a022512e9054ce9fcdca9b32/transformed/lifecycle-runtime-2.3.1/res
+com.pfservices.telefeshield.app-core-ktx-1.5.0-6 /home/codespace/.gradle/caches/9.7.1/transforms/c153dc9c09d46df9afba494bbedd70c3/transformed/core-ktx-1.5.0/res
+com.pfservices.telefeshield.app-recyclerview-1.3.0-7 /home/codespace/.gradle/caches/9.7.1/transforms/c6e953ec27e4b582c8eae839c1f625ce/transformed/recyclerview-1.3.0/res
+com.pfservices.telefeshield.app-pngs-8 /workspaces/Telefe-Shield/app/build/generated/res/pngs/debug
+com.pfservices.telefeshield.app-resValues-9 /workspaces/Telefe-Shield/app/build/generated/res/resValues/debug
+com.pfservices.telefeshield.app-packageDebugResources-10 /workspaces/Telefe-Shield/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.pfservices.telefeshield.app-packageDebugResources-11 /workspaces/Telefe-Shield/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.pfservices.telefeshield.app-debug-12 /workspaces/Telefe-Shield/app/build/intermediates/merged_res/debug/mergeDebugResources
+com.pfservices.telefeshield.app-debug-13 /workspaces/Telefe-Shield/app/src/debug/res
+com.pfservices.telefeshield.app-main-14 /workspaces/Telefe-Shield/app/src/main/res

@@ -1,0 +1,5 @@
+R_DEF: Internal format may change without notice
+local
+drawable tv_banner
+mipmap ic_launcher
+style AppTheme

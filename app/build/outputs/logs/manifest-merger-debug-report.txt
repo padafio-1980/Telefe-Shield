@@ -1,0 +1,146 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
+MERGED from [androidx.media3:media3-ui:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/05ef3213b2498da8d9bf77de25ebb8bc/transformed/media3-ui-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-extractor:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/d608eb7cbe975ca56fdfb01db2f3a547/transformed/media3-extractor-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-container:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/6a1787ae7a66ee4d11af6690ec4c04c9/transformed/media3-container-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-datasource:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/c657a38a0f545bdd34fdf458aa139d5e/transformed/media3-datasource-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-decoder:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/adbd73865e64e4beff5c187e53792d51/transformed/media3-decoder-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-database:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/ed25fcee09e27d203357e8bf107d50a3/transformed/media3-database-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-common:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/7e02c92e3e1a7c5339e0947bd9972865/transformed/media3-common-1.8.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.media3:media3-exoplayer-hls:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/3cb93a2db12953d5c514fd0ef487e54b/transformed/media3-exoplayer-hls-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.media3:media3-exoplayer:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/5295f0dfb46701489f4e3398b4442893/transformed/media3-exoplayer-1.8.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.recyclerview:recyclerview:1.3.0] /home/codespace/.gradle/caches/9.7.1/transforms/c6e953ec27e4b582c8eae839c1f625ce/transformed/recyclerview-1.3.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.0.0] /home/codespace/.gradle/caches/9.7.1/transforms/b23a57db3bb8a33f217a306e36ead75f/transformed/customview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/codespace/.gradle/caches/9.7.1/transforms/840cb73b9663aa90d14e8d4b29b946e6/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.core:core-ktx:1.5.0] /home/codespace/.gradle/caches/9.7.1/transforms/c153dc9c09d46df9afba494bbedd70c3/transformed/core-ktx-1.5.0/AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:17:1-26:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codespace/.gradle/caches/9.7.1/transforms/8e169fcf294aae777cfda4fb87d00e56/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] /home/codespace/.gradle/caches/9.7.1/transforms/35d56caee94262b618d4f6d5439a990c/transformed/exifinterface-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /home/codespace/.gradle/caches/9.7.1/transforms/9ff976a8a022512e9054ce9fcdca9b32/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/codespace/.gradle/caches/9.7.1/transforms/372b6b10281f2aa85896b03837952de9/transformed/core-runtime-2.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.1] /home/codespace/.gradle/caches/9.7.1/transforms/3233b566033325331af45dd6f5cd4bfb/transformed/annotation-experimental-1.3.1/AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:4:22-64
+uses-feature#android.software.leanback
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:6:5-8:36
+	android:required
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:8:9-33
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:7:9-49
+uses-feature#android.hardware.touchscreen
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:10:5-12:36
+	android:required
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:12:9-33
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:11:9-52
+application
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-35:19
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-35:19
+MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:24:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codespace/.gradle/caches/9.7.1/transforms/8e169fcf294aae777cfda4fb87d00e56/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codespace/.gradle/caches/9.7.1/transforms/8e169fcf294aae777cfda4fb87d00e56/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+	android:extractNativeLibs
+		INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:24:18-86
+	android:label
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:18:9-36
+	android:icon
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:17:9-43
+	android:allowBackup
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:15:9-36
+	android:banner
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:16:9-45
+	android:theme
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:19:9-40
+activity#com.pfservices.telefeshield.MainActivity
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:21:9-33:20
+	android:screenOrientation
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:25:13-50
+	android:exported
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:24:13-36
+	android:configChanges
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:23:13-94
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:22:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER+category:name:android.intent.category.LEANBACK_LAUNCHER
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:27:13-31:29
+action#android.intent.action.MAIN
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:17-69
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:17-77
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:27-74
+category#android.intent.category.LEANBACK_LAUNCHER
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:17-86
+	android:name
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:27-83
+uses-sdk
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+MERGED from [androidx.media3:media3-ui:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/05ef3213b2498da8d9bf77de25ebb8bc/transformed/media3-ui-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-ui:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/05ef3213b2498da8d9bf77de25ebb8bc/transformed/media3-ui-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-extractor:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/d608eb7cbe975ca56fdfb01db2f3a547/transformed/media3-extractor-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-extractor:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/d608eb7cbe975ca56fdfb01db2f3a547/transformed/media3-extractor-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-container:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/6a1787ae7a66ee4d11af6690ec4c04c9/transformed/media3-container-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-container:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/6a1787ae7a66ee4d11af6690ec4c04c9/transformed/media3-container-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-datasource:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/c657a38a0f545bdd34fdf458aa139d5e/transformed/media3-datasource-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-datasource:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/c657a38a0f545bdd34fdf458aa139d5e/transformed/media3-datasource-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-decoder:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/adbd73865e64e4beff5c187e53792d51/transformed/media3-decoder-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-decoder:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/adbd73865e64e4beff5c187e53792d51/transformed/media3-decoder-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-database:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/ed25fcee09e27d203357e8bf107d50a3/transformed/media3-database-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-database:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/ed25fcee09e27d203357e8bf107d50a3/transformed/media3-database-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-common:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/7e02c92e3e1a7c5339e0947bd9972865/transformed/media3-common-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-common:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/7e02c92e3e1a7c5339e0947bd9972865/transformed/media3-common-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-exoplayer-hls:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/3cb93a2db12953d5c514fd0ef487e54b/transformed/media3-exoplayer-hls-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-exoplayer-hls:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/3cb93a2db12953d5c514fd0ef487e54b/transformed/media3-exoplayer-hls-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-exoplayer:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/5295f0dfb46701489f4e3398b4442893/transformed/media3-exoplayer-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.media3:media3-exoplayer:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/5295f0dfb46701489f4e3398b4442893/transformed/media3-exoplayer-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.3.0] /home/codespace/.gradle/caches/9.7.1/transforms/c6e953ec27e4b582c8eae839c1f625ce/transformed/recyclerview-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.3.0] /home/codespace/.gradle/caches/9.7.1/transforms/c6e953ec27e4b582c8eae839c1f625ce/transformed/recyclerview-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/codespace/.gradle/caches/9.7.1/transforms/b23a57db3bb8a33f217a306e36ead75f/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.0.0] /home/codespace/.gradle/caches/9.7.1/transforms/b23a57db3bb8a33f217a306e36ead75f/transformed/customview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/codespace/.gradle/caches/9.7.1/transforms/840cb73b9663aa90d14e8d4b29b946e6/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/codespace/.gradle/caches/9.7.1/transforms/840cb73b9663aa90d14e8d4b29b946e6/transformed/customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.core:core-ktx:1.5.0] /home/codespace/.gradle/caches/9.7.1/transforms/c153dc9c09d46df9afba494bbedd70c3/transformed/core-ktx-1.5.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core-ktx:1.5.0] /home/codespace/.gradle/caches/9.7.1/transforms/c153dc9c09d46df9afba494bbedd70c3/transformed/core-ktx-1.5.0/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codespace/.gradle/caches/9.7.1/transforms/8e169fcf294aae777cfda4fb87d00e56/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codespace/.gradle/caches/9.7.1/transforms/8e169fcf294aae777cfda4fb87d00e56/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] /home/codespace/.gradle/caches/9.7.1/transforms/35d56caee94262b618d4f6d5439a990c/transformed/exifinterface-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] /home/codespace/.gradle/caches/9.7.1/transforms/35d56caee94262b618d4f6d5439a990c/transformed/exifinterface-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /home/codespace/.gradle/caches/9.7.1/transforms/9ff976a8a022512e9054ce9fcdca9b32/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.3.1] /home/codespace/.gradle/caches/9.7.1/transforms/9ff976a8a022512e9054ce9fcdca9b32/transformed/lifecycle-runtime-2.3.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/codespace/.gradle/caches/9.7.1/transforms/372b6b10281f2aa85896b03837952de9/transformed/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.1.0] /home/codespace/.gradle/caches/9.7.1/transforms/372b6b10281f2aa85896b03837952de9/transformed/core-runtime-2.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.annotation:annotation-experimental:1.3.1] /home/codespace/.gradle/caches/9.7.1/transforms/3233b566033325331af45dd6f5cd4bfb/transformed/annotation-experimental-1.3.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.1] /home/codespace/.gradle/caches/9.7.1/transforms/3233b566033325331af45dd6f5cd4bfb/transformed/annotation-experimental-1.3.1/AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [androidx.media3:media3-common:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/7e02c92e3e1a7c5339e0947bd9972865/transformed/media3-common-1.8.0/AndroidManifest.xml:22:5-79
+MERGED from [androidx.media3:media3-exoplayer:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/5295f0dfb46701489f4e3398b4442893/transformed/media3-exoplayer-1.8.0/AndroidManifest.xml:22:5-79
+MERGED from [androidx.media3:media3-exoplayer:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/5295f0dfb46701489f4e3398b4442893/transformed/media3-exoplayer-1.8.0/AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from [androidx.media3:media3-common:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/7e02c92e3e1a7c5339e0947bd9972865/transformed/media3-common-1.8.0/AndroidManifest.xml:22:22-76
