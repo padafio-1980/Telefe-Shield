@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
@@ -49,34 +51,48 @@ class MainActivity : Activity() {
 
         private const val USER_AGENT =
             "Mozilla/5.0 (Linux; Android 11; SHIELD Android TV) " +
-            "AppleWebKit/537.36 Chrome/131 Safari/537.36"
+                "AppleWebKit/537.36 Chrome/131 Safari/537.36"
+    }
+
+    enum class QualityMode(
+        val label: String
+    ) {
+        HD_1080("1080p"),
+        AUTO("Auto"),
+        HD_720("720p")
     }
 
     /*
-     * NORMAL HTTPS CLIENT
-     *
-     * Dailymotion continues to use normal certificate
-     * and hostname verification.
+     * 1080p is the default.
      */
-    private val http = OkHttpClient.Builder()
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(20, TimeUnit.SECONDS)
-        .followRedirects(true)
-        .build()
+    private var qualityMode =
+        QualityMode.HD_1080
 
     /*
-     * TELEFE-ONLY HTTPS CLIENT
-     *
-     * The SHIELD does not accept the certificate chain
-     * currently presented by mitelefe.com.
-     *
-     * Certificate-chain verification is bypassed here,
-     * but hostname access is restricted to mitelefe.com
-     * and its subdomains.
-     *
-     * Dailymotion DOES NOT use this client.
+     * NORMAL HTTPS CLIENT.
+     * Dailymotion uses normal certificate validation.
      */
-    private val telefeHttp: OkHttpClient by lazy {
+    private val http =
+        OkHttpClient.Builder()
+            .connectTimeout(
+                15,
+                TimeUnit.SECONDS
+            )
+            .readTimeout(
+                20,
+                TimeUnit.SECONDS
+            )
+            .followRedirects(true)
+            .build()
+
+    /*
+     * TELEFE-ONLY HTTPS CLIENT.
+     *
+     * This preserves the working SHIELD certificate
+     * workaround. Dailymotion does NOT use this client.
+     */
+    private val telefeHttp:
+        OkHttpClient by lazy {
 
         val trustAll =
             object : X509TrustManager {
@@ -101,7 +117,9 @@ class MainActivity : Activity() {
 
         sslContext.init(
             null,
-            arrayOf<TrustManager>(trustAll),
+            arrayOf<TrustManager>(
+                trustAll
+            ),
             SecureRandom()
         )
 
@@ -110,16 +128,18 @@ class MainActivity : Activity() {
                 sslContext.socketFactory,
                 trustAll
             )
-            .hostnameVerifier { hostname, _ ->
+            .hostnameVerifier {
+                    hostname,
+                    _ ->
 
                 hostname.equals(
                     "mitelefe.com",
                     ignoreCase = true
                 ) ||
-                hostname.endsWith(
-                    ".mitelefe.com",
-                    ignoreCase = true
-                )
+                    hostname.endsWith(
+                        ".mitelefe.com",
+                        ignoreCase = true
+                    )
             }
             .connectTimeout(
                 15,
@@ -133,23 +153,41 @@ class MainActivity : Activity() {
             .build()
     }
 
-    private lateinit var root: FrameLayout
-    private lateinit var playerView: PlayerView
-    private lateinit var status: TextView
-    private lateinit var spinner: ProgressBar
+    private lateinit var root:
+        FrameLayout
 
-    private var player: ExoPlayer? = null
-    private var retryCount = 0
+    private lateinit var playerView:
+        PlayerView
+
+    private lateinit var status:
+        TextView
+
+    private lateinit var spinner:
+        ProgressBar
+
+    private lateinit var qualityOverlay:
+        TextView
+
+    private var player:
+        ExoPlayer? = null
+
+    private var retryCount =
+        0
+
+    private var centerDownTime =
+        0L
 
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {
-        super.onCreate(savedInstanceState)
+        super.onCreate(
+            savedInstanceState
+        )
 
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
         buildUi()
         resolveAndPlay()
@@ -167,7 +205,8 @@ class MainActivity : Activity() {
         playerView =
             PlayerView(this).apply {
 
-                useController = true
+                useController =
+                    true
 
                 controllerShowTimeoutMs =
                     3500
@@ -230,17 +269,65 @@ class MainActivity : Activity() {
             )
         )
 
+        /*
+         * Quality indicator.
+         */
+        qualityOverlay =
+            TextView(this).apply {
+
+                text =
+                    ""
+
+                setTextColor(
+                    0xFFFFFFFF.toInt()
+                )
+
+                setBackgroundColor(
+                    0xCC000000.toInt()
+                )
+
+                textSize =
+                    20f
+
+                gravity =
+                    Gravity.CENTER
+
+                setPadding(
+                    28,
+                    16,
+                    28,
+                    16
+                )
+
+                visibility =
+                    View.GONE
+            }
+
+        val qualityParams =
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+
+                gravity =
+                    Gravity.TOP or
+                        Gravity.END
+
+                topMargin =
+                    40
+
+                marginEnd =
+                    40
+            }
+
+        root.addView(
+            qualityOverlay,
+            qualityParams
+        )
+
         setContentView(root)
     }
 
-    /*
-     * STEP 1
-     *
-     * Load the Telefe live page.
-     *
-     * This request uses telefeHttp because the
-     * SHIELD rejects Telefe's certificate chain.
-     */
     private fun resolveAndPlay() {
 
         showStatus(
@@ -250,7 +337,9 @@ class MainActivity : Activity() {
 
         val request =
             Request.Builder()
-                .url(PAGE_URL)
+                .url(
+                    PAGE_URL
+                )
                 .header(
                     "User-Agent",
                     USER_AGENT
@@ -258,7 +347,9 @@ class MainActivity : Activity() {
                 .build()
 
         telefeHttp
-            .newCall(request)
+            .newCall(
+                request
+            )
             .enqueue(
 
                 object : Callback {
@@ -280,7 +371,9 @@ class MainActivity : Activity() {
 
                         response.use {
 
-                            if (!it.isSuccessful) {
+                            if (
+                                !it.isSuccessful
+                            ) {
 
                                 return fail(
                                     "Telefe page returned HTTP ${it.code}."
@@ -297,9 +390,13 @@ class MainActivity : Activity() {
                                     "data-player-url\\s*=\\s*[\\\"']([^\\\"']+)[\\\"']",
                                     RegexOption.IGNORE_CASE
                                 )
-                                    .find(html)
+                                    .find(
+                                        html
+                                    )
                                     ?.groupValues
-                                    ?.getOrNull(1)
+                                    ?.getOrNull(
+                                        1
+                                    )
 
                             if (
                                 raw.isNullOrBlank()
@@ -314,7 +411,8 @@ class MainActivity : Activity() {
                                 Html.fromHtml(
                                     raw,
                                     Html.FROM_HTML_MODE_LEGACY
-                                ).toString()
+                                )
+                                    .toString()
 
                             if (
                                 streamUrl.contains(
@@ -339,14 +437,6 @@ class MainActivity : Activity() {
             )
     }
 
-    /*
-     * STEP 2
-     *
-     * Resolve Dailymotion.
-     *
-     * IMPORTANT:
-     * This uses the NORMAL HTTPS client.
-     */
     private fun resolveDailymotion(
         dailymotionUrl: String
     ) {
@@ -361,9 +451,13 @@ class MainActivity : Activity() {
                 """dailymotion\.com/(?:embed/)?(?:video|live)/([^_?/#]+)""",
                 RegexOption.IGNORE_CASE
             )
-                .find(dailymotionUrl)
+                .find(
+                    dailymotionUrl
+                )
                 ?.groupValues
-                ?.getOrNull(1)
+                ?.getOrNull(
+                    1
+                )
 
         if (
             videoId.isNullOrBlank()
@@ -375,8 +469,8 @@ class MainActivity : Activity() {
         }
 
         /*
-         * This embedder parameter is required for
-         * Telefe's Dailymotion playback.
+         * KEEP THIS:
+         * Telefe requires the embedder parameter.
          */
         val metadataUrl =
             "https://www.dailymotion.com/player/metadata/video/$videoId"
@@ -390,7 +484,9 @@ class MainActivity : Activity() {
 
         val request =
             Request.Builder()
-                .url(metadataUrl)
+                .url(
+                    metadataUrl
+                )
                 .header(
                     "User-Agent",
                     USER_AGENT
@@ -418,9 +514,11 @@ class MainActivity : Activity() {
                 .build()
 
         /*
-         * NORMAL HTTPS validation here.
+         * Dailymotion stays on normal HTTPS.
          */
-        http.newCall(request)
+        http.newCall(
+            request
+        )
             .enqueue(
 
                 object : Callback {
@@ -459,10 +557,14 @@ class MainActivity : Activity() {
                             try {
 
                                 val json =
-                                    JSONObject(text)
+                                    JSONObject(
+                                        text
+                                    )
 
                                 if (
-                                    json.has("error")
+                                    json.has(
+                                        "error"
+                                    )
                                 ) {
 
                                     val error =
@@ -493,69 +595,59 @@ class MainActivity : Activity() {
                                             "Dailymotion returned no video qualities."
                                         )
 
+                                /*
+                                 * We deliberately use Dailymotion's
+                                 * AUTO/master HLS playlist.
+                                 *
+                                 * ExoPlayer then controls whether it
+                                 * can use 1080, Auto or max 720.
+                                 */
                                 var hlsUrl:
                                     String? =
-                                    null
-
-                                /*
-                                 * First try automatic HLS.
-                                 */
-                                val auto =
-                                    qualities.optJSONArray(
+                                    findHlsInQuality(
+                                        qualities,
                                         "auto"
                                     )
 
+                                /*
+                                 * Fallback if Dailymotion does not
+                                 * provide an auto/master playlist.
+                                 */
                                 if (
-                                    auto != null
+                                    hlsUrl == null
                                 ) {
 
+                                    val preferred =
+                                        listOf(
+                                            "1080",
+                                            "720",
+                                            "480",
+                                            "380",
+                                            "240",
+                                            "144"
+                                        )
+
                                     for (
-                                        i in 0 until auto.length()
+                                        quality in preferred
                                     ) {
 
-                                        val source =
-                                            auto.optJSONObject(
-                                                i
-                                            )
-                                                ?: continue
-
-                                        val url =
-                                            source.optString(
-                                                "url"
-                                            )
-
-                                        val type =
-                                            source.optString(
-                                                "type"
+                                        hlsUrl =
+                                            findHlsInQuality(
+                                                qualities,
+                                                quality
                                             )
 
                                         if (
-                                            url.startsWith(
-                                                "http"
-                                            ) &&
-                                            (
-                                                url.contains(
-                                                    ".m3u8",
-                                                    ignoreCase = true
-                                                ) ||
-                                                type.contains(
-                                                    "mpegurl",
-                                                    ignoreCase = true
-                                                )
-                                            )
+                                            hlsUrl != null
                                         ) {
-
-                                            hlsUrl =
-                                                url
-
                                             break
                                         }
                                     }
                                 }
 
                                 /*
-                                 * Search all other qualities if
-                                 * automatic did not contain HLS.
+                                 * Last-resort search through whatever
+                                 * quality keys Dailymotion returned.
                                  */
                                 if (
                                     hlsUrl == null
@@ -569,57 +661,11 @@ class MainActivity : Activity() {
                                         hlsUrl == null
                                     ) {
 
-                                        val key =
-                                            keys.next()
-
-                                        val array =
-                                            qualities.optJSONArray(
-                                                key
+                                        hlsUrl =
+                                            findHlsInQuality(
+                                                qualities,
+                                                keys.next()
                                             )
-                                                ?: continue
-
-                                        for (
-                                            i in 0 until array.length()
-                                        ) {
-
-                                            val source =
-                                                array.optJSONObject(
-                                                    i
-                                                )
-                                                    ?: continue
-
-                                            val url =
-                                                source.optString(
-                                                    "url"
-                                                )
-
-                                            val type =
-                                                source.optString(
-                                                    "type"
-                                                )
-
-                                            if (
-                                                url.startsWith(
-                                                    "http"
-                                                ) &&
-                                                (
-                                                    url.contains(
-                                                        ".m3u8",
-                                                        ignoreCase = true
-                                                    ) ||
-                                                    type.contains(
-                                                        "mpegurl",
-                                                        ignoreCase = true
-                                                    )
-                                                )
-                                            ) {
-
-                                                hlsUrl =
-                                                    url
-
-                                                break
-                                            }
-                                        }
                                     }
                                 }
 
@@ -658,12 +704,60 @@ class MainActivity : Activity() {
             )
     }
 
-    /*
-     * Telefe's non-Dailymotion fallback.
-     *
-     * This is also mitelefe.com, so it uses the
-     * Telefe-only HTTPS client.
-     */
+    private fun findHlsInQuality(
+        qualities: JSONObject,
+        quality: String
+    ): String? {
+
+        val array =
+            qualities.optJSONArray(
+                quality
+            )
+                ?: return null
+
+        for (
+            i in 0 until array.length()
+        ) {
+
+            val source =
+                array.optJSONObject(
+                    i
+                )
+                    ?: continue
+
+            val url =
+                source.optString(
+                    "url"
+                )
+
+            val type =
+                source.optString(
+                    "type"
+                )
+
+            if (
+                url.startsWith(
+                    "http"
+                ) &&
+                (
+                    url.contains(
+                        ".m3u8",
+                        ignoreCase = true
+                    ) ||
+                    type.contains(
+                        "mpegurl",
+                        ignoreCase = true
+                    )
+                )
+            ) {
+
+                return url
+            }
+        }
+
+        return null
+    }
+
     private fun tokenizeTelefe(
         streamUrl: String
     ) {
@@ -687,8 +781,12 @@ class MainActivity : Activity() {
 
         val request =
             Request.Builder()
-                .url(TOKEN_URL)
-                .post(body)
+                .url(
+                    TOKEN_URL
+                )
+                .post(
+                    body
+                )
                 .header(
                     "Content-Type",
                     "application/json"
@@ -708,7 +806,9 @@ class MainActivity : Activity() {
                 .build()
 
         telefeHttp
-            .newCall(request)
+            .newCall(
+                request
+            )
             .enqueue(
 
                 object : Callback {
@@ -811,7 +911,9 @@ class MainActivity : Activity() {
         player?.release()
 
         val headers =
-            if (dailymotion) {
+            if (
+                dailymotion
+            ) {
 
                 mapOf(
                     "User-Agent" to USER_AGENT,
@@ -858,12 +960,22 @@ class MainActivity : Activity() {
                 )
 
         player =
-            ExoPlayer.Builder(this)
+            ExoPlayer.Builder(
+                this
+            )
                 .build()
                 .also { exo ->
 
                     playerView.player =
                         exo
+
+                    /*
+                     * Apply 1080p default BEFORE playback starts.
+                     */
+                    applyQuality(
+                        exo,
+                        qualityMode
+                    )
 
                     exo.addListener(
 
@@ -886,6 +998,8 @@ class MainActivity : Activity() {
                                         "",
                                         false
                                     )
+
+                                    showQualityOverlay()
                                 }
 
                                 if (
@@ -920,6 +1034,111 @@ class MainActivity : Activity() {
                         true
                 }
     }
+
+    /*
+     * QUALITY CONTROL
+     *
+     * 1080p = adaptive playback, maximum 1080p.
+     * Auto  = unrestricted adaptive playback.
+     * 720p  = adaptive playback, maximum 720p.
+     */
+    private fun applyQuality(
+        exo: ExoPlayer,
+        mode: QualityMode
+    ) {
+
+        val builder =
+            exo.trackSelectionParameters
+                .buildUpon()
+
+        when (
+            mode
+        ) {
+
+            QualityMode.HD_1080 -> {
+
+                builder.setMaxVideoSize(
+                    Int.MAX_VALUE,
+                    1080
+                )
+            }
+
+            QualityMode.AUTO -> {
+
+                builder.setMaxVideoSize(
+                    Int.MAX_VALUE,
+                    Int.MAX_VALUE
+                )
+            }
+
+            QualityMode.HD_720 -> {
+
+                builder.setMaxVideoSize(
+                    Int.MAX_VALUE,
+                    720
+                )
+            }
+        }
+
+        exo.trackSelectionParameters =
+            builder.build()
+    }
+
+    private fun cycleQuality() {
+
+        qualityMode =
+            when (
+                qualityMode
+            ) {
+
+                QualityMode.HD_1080 ->
+                    QualityMode.AUTO
+
+                QualityMode.AUTO ->
+                    QualityMode.HD_720
+
+                QualityMode.HD_720 ->
+                    QualityMode.HD_1080
+            }
+
+        player?.let {
+
+            applyQuality(
+                it,
+                qualityMode
+            )
+        }
+
+        showQualityOverlay()
+    }
+
+    private fun showQualityOverlay() {
+
+        runOnUiThread {
+
+            qualityOverlay.text =
+                "Quality: ${qualityMode.label}"
+
+            qualityOverlay.visibility =
+                View.VISIBLE
+
+            qualityOverlay.removeCallbacks(
+                hideQualityOverlay
+            )
+
+            qualityOverlay.postDelayed(
+                hideQualityOverlay,
+                2200
+            )
+        }
+    }
+
+    private val hideQualityOverlay =
+        Runnable {
+
+            qualityOverlay.visibility =
+                View.GONE
+        }
 
     private fun retryLater() {
 
@@ -993,7 +1212,9 @@ class MainActivity : Activity() {
                 }
 
             spinner.visibility =
-                if (loading) {
+                if (
+                    loading
+                ) {
 
                     View.VISIBLE
 
@@ -1008,6 +1229,69 @@ class MainActivity : Activity() {
         event: KeyEvent
     ): Boolean {
 
+        /*
+         * MENU button cycles:
+         *
+         * 1080p -> Auto -> 720p -> 1080p
+         */
+        if (
+            event.action ==
+            KeyEvent.ACTION_DOWN &&
+            event.keyCode ==
+            KeyEvent.KEYCODE_MENU
+        ) {
+
+            cycleQuality()
+
+            return true
+        }
+
+        /*
+         * Long press OK/center also changes quality.
+         * Useful on SHIELD remotes without a Menu key.
+         */
+        if (
+            event.keyCode ==
+            KeyEvent.KEYCODE_DPAD_CENTER ||
+            event.keyCode ==
+            KeyEvent.KEYCODE_ENTER
+        ) {
+
+            if (
+                event.action ==
+                KeyEvent.ACTION_DOWN &&
+                event.repeatCount ==
+                0
+            ) {
+
+                centerDownTime =
+                    System.currentTimeMillis()
+            }
+
+            if (
+                event.action ==
+                KeyEvent.ACTION_UP
+            ) {
+
+                val heldFor =
+                    System.currentTimeMillis() -
+                        centerDownTime
+
+                if (
+                    heldFor >=
+                    700L
+                ) {
+
+                    cycleQuality()
+
+                    return true
+                }
+            }
+        }
+
+        /*
+         * Original OK-to-retry behavior.
+         */
         if (
             event.action ==
             KeyEvent.ACTION_DOWN &&
@@ -1055,6 +1339,10 @@ class MainActivity : Activity() {
     }
 
     override fun onDestroy() {
+
+        qualityOverlay.removeCallbacks(
+            hideQualityOverlay
+        )
 
         playerView.player =
             null
