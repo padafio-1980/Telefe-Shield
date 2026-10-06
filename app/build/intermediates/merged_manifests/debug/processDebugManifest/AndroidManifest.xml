@@ -27,6 +27,7 @@
         android:extractNativeLibs="false"
         android:icon="@mipmap/ic_launcher"
         android:label="Telefe Live"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.pfservices.telefeshield.MainActivity"

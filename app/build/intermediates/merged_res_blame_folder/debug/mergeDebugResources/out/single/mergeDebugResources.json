@@ -1,11 +1,19 @@
 [
     {
+        "merged": "com.pfservices.telefeshield.app-debug-12:/raw_digicert_global_root_g2.pem.flat",
+        "source": "com.pfservices.telefeshield.app-main-14:/raw/digicert_global_root_g2.pem"
+    },
+    {
         "merged": "com.pfservices.telefeshield.app-debug-12:/mipmap-hdpi_ic_launcher.png.flat",
         "source": "com.pfservices.telefeshield.app-main-14:/mipmap-hdpi/ic_launcher.png"
     },
     {
         "merged": "com.pfservices.telefeshield.app-debug-12:/mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "com.pfservices.telefeshield.app-main-14:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.pfservices.telefeshield.app-debug-12:/xml_network_security_config.xml.flat",
+        "source": "com.pfservices.telefeshield.app-main-14:/xml/network_security_config.xml"
     },
     {
         "merged": "com.pfservices.telefeshield.app-debug-12:/mipmap-xxhdpi_ic_launcher.png.flat",

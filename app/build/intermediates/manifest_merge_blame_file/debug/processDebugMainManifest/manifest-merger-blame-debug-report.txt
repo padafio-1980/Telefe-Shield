@@ -30,7 +30,7 @@
 20-->[androidx.media3:media3-common:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/7e02c92e3e1a7c5339e0947bd9972865/transformed/media3-common-1.8.0/AndroidManifest.xml:22:22-76
 21
 22    <application
-22-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-35:19
+22-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-36:19
 23        android:allowBackup="false"
 23-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:15:9-36
 24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -43,32 +43,34 @@
 28-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:17:9-43
 29        android:label="Telefe Live"
 29-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:18:9-36
-30        android:theme="@style/AppTheme" >
-30-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:19:9-40
-31        <activity
-31-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:21:9-33:20
-32            android:name="com.pfservices.telefeshield.MainActivity"
-32-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:22:13-41
-33            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
-33-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:23:13-94
-34            android:exported="true"
-34-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:24:13-36
-35            android:screenOrientation="landscape" >
-35-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:25:13-50
-36            <intent-filter>
-36-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:27:13-31:29
-37                <action android:name="android.intent.action.MAIN" />
-37-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:17-69
-37-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:25-66
-38
-39                <category android:name="android.intent.category.LAUNCHER" />
-39-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:17-77
-39-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:27-74
-40                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-40-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:17-86
-40-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:27-83
-41            </intent-filter>
-42        </activity>
-43    </application>
-44
-45</manifest>
+30        android:networkSecurityConfig="@xml/network_security_config"
+30-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:19:9-69
+31        android:theme="@style/AppTheme" >
+31-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:20:9-40
+32        <activity
+32-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:22:9-34:20
+33            android:name="com.pfservices.telefeshield.MainActivity"
+33-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:23:13-41
+34            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize"
+34-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:24:13-94
+35            android:exported="true"
+35-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:25:13-36
+36            android:screenOrientation="landscape" >
+36-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:26:13-50
+37            <intent-filter>
+37-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:13-32:29
+38                <action android:name="android.intent.action.MAIN" />
+38-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:17-69
+38-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:25-66
+39
+40                <category android:name="android.intent.category.LAUNCHER" />
+40-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:17-77
+40-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:27-74
+41                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+41-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:31:17-86
+41-->/workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:31:27-83
+42            </intent-filter>
+43        </activity>
+44    </application>
+45
+46</manifest>

@@ -28,7 +28,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 class MainActivity : Activity() {
 
@@ -47,11 +52,86 @@ class MainActivity : Activity() {
             "AppleWebKit/537.36 Chrome/131 Safari/537.36"
     }
 
+    /*
+     * NORMAL HTTPS CLIENT
+     *
+     * Dailymotion continues to use normal certificate
+     * and hostname verification.
+     */
     private val http = OkHttpClient.Builder()
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(20, TimeUnit.SECONDS)
         .followRedirects(true)
         .build()
+
+    /*
+     * TELEFE-ONLY HTTPS CLIENT
+     *
+     * The SHIELD does not accept the certificate chain
+     * currently presented by mitelefe.com.
+     *
+     * Certificate-chain verification is bypassed here,
+     * but hostname access is restricted to mitelefe.com
+     * and its subdomains.
+     *
+     * Dailymotion DOES NOT use this client.
+     */
+    private val telefeHttp: OkHttpClient by lazy {
+
+        val trustAll =
+            object : X509TrustManager {
+
+                override fun checkClientTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) = Unit
+
+                override fun checkServerTrusted(
+                    chain: Array<out X509Certificate>?,
+                    authType: String?
+                ) = Unit
+
+                override fun getAcceptedIssuers():
+                    Array<X509Certificate> =
+                    emptyArray()
+            }
+
+        val sslContext =
+            SSLContext.getInstance("TLS")
+
+        sslContext.init(
+            null,
+            arrayOf<TrustManager>(trustAll),
+            SecureRandom()
+        )
+
+        OkHttpClient.Builder()
+            .sslSocketFactory(
+                sslContext.socketFactory,
+                trustAll
+            )
+            .hostnameVerifier { hostname, _ ->
+
+                hostname.equals(
+                    "mitelefe.com",
+                    ignoreCase = true
+                ) ||
+                hostname.endsWith(
+                    ".mitelefe.com",
+                    ignoreCase = true
+                )
+            }
+            .connectTimeout(
+                15,
+                TimeUnit.SECONDS
+            )
+            .readTimeout(
+                20,
+                TimeUnit.SECONDS
+            )
+            .followRedirects(true)
+            .build()
+    }
 
     private lateinit var root: FrameLayout
     private lateinit var playerView: PlayerView
@@ -61,7 +141,9 @@ class MainActivity : Activity() {
     private var player: ExoPlayer? = null
     private var retryCount = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
 
         window.decorView.systemUiVisibility =
@@ -74,15 +156,26 @@ class MainActivity : Activity() {
     }
 
     private fun buildUi() {
-        root = FrameLayout(this).apply {
-            setBackgroundColor(0xFF000000.toInt())
-        }
 
-        playerView = PlayerView(this).apply {
-            useController = true
-            controllerShowTimeoutMs = 3500
-            setShowBuffering(PlayerView.SHOW_BUFFERING_ALWAYS)
-        }
+        root =
+            FrameLayout(this).apply {
+                setBackgroundColor(
+                    0xFF000000.toInt()
+                )
+            }
+
+        playerView =
+            PlayerView(this).apply {
+
+                useController = true
+
+                controllerShowTimeoutMs =
+                    3500
+
+                setShowBuffering(
+                    PlayerView.SHOW_BUFFERING_ALWAYS
+                )
+            }
 
         root.addView(
             playerView,
@@ -92,7 +185,8 @@ class MainActivity : Activity() {
             )
         )
 
-        spinner = ProgressBar(this)
+        spinner =
+            ProgressBar(this)
 
         root.addView(
             spinner,
@@ -103,13 +197,29 @@ class MainActivity : Activity() {
             )
         )
 
-        status = TextView(this).apply {
-            text = "Connecting to Telefe…"
-            setTextColor(0xFFFFFFFF.toInt())
-            textSize = 18f
-            gravity = Gravity.CENTER
-            setPadding(40, 30, 40, 30)
-        }
+        status =
+            TextView(this).apply {
+
+                text =
+                    "Connecting to Telefe…"
+
+                setTextColor(
+                    0xFFFFFFFF.toInt()
+                )
+
+                textSize =
+                    18f
+
+                gravity =
+                    Gravity.CENTER
+
+                setPadding(
+                    40,
+                    30,
+                    40,
+                    30
+                )
+            }
 
         root.addView(
             status,
@@ -123,6 +233,14 @@ class MainActivity : Activity() {
         setContentView(root)
     }
 
+    /*
+     * STEP 1
+     *
+     * Load the Telefe live page.
+     *
+     * This request uses telefeHttp because the
+     * SHIELD rejects Telefe's certificate chain.
+     */
     private fun resolveAndPlay() {
 
         showStatus(
@@ -130,74 +248,105 @@ class MainActivity : Activity() {
             true
         )
 
-        val request = Request.Builder()
-            .url(PAGE_URL)
-            .header("User-Agent", USER_AGENT)
-            .build()
+        val request =
+            Request.Builder()
+                .url(PAGE_URL)
+                .header(
+                    "User-Agent",
+                    USER_AGENT
+                )
+                .build()
 
-        http.newCall(request).enqueue(
-            object : Callback {
+        telefeHttp
+            .newCall(request)
+            .enqueue(
 
-                override fun onFailure(
-                    call: Call,
-                    e: IOException
-                ) {
-                    fail(
-                        "Could not load Telefe.\n\n${e.message}"
-                    )
-                }
+                object : Callback {
 
-                override fun onResponse(
-                    call: Call,
-                    response: Response
-                ) {
-                    response.use {
+                    override fun onFailure(
+                        call: Call,
+                        e: IOException
+                    ) {
 
-                        if (!it.isSuccessful) {
-                            return fail(
-                                "Telefe page returned HTTP ${it.code}."
-                            )
-                        }
-
-                        val html =
-                            it.body?.string().orEmpty()
-
-                        val raw = Regex(
-                            "data-player-url\\s*=\\s*[\\\"']([^\\\"']+)[\\\"']",
-                            RegexOption.IGNORE_CASE
+                        fail(
+                            "Could not load Telefe.\n\n${e.message}"
                         )
-                            .find(html)
-                            ?.groupValues
-                            ?.getOrNull(1)
+                    }
 
-                        if (raw.isNullOrBlank()) {
-                            return fail(
-                                "Could not find Telefe's live player URL."
-                            )
-                        }
+                    override fun onResponse(
+                        call: Call,
+                        response: Response
+                    ) {
 
-                        val streamUrl =
-                            Html.fromHtml(
-                                raw,
-                                Html.FROM_HTML_MODE_LEGACY
-                            ).toString()
+                        response.use {
 
-                        if (
-                            streamUrl.contains(
-                                "dailymotion.com",
-                                ignoreCase = true
-                            )
-                        ) {
-                            resolveDailymotion(streamUrl)
-                        } else {
-                            tokenizeTelefe(streamUrl)
+                            if (!it.isSuccessful) {
+
+                                return fail(
+                                    "Telefe page returned HTTP ${it.code}."
+                                )
+                            }
+
+                            val html =
+                                it.body
+                                    ?.string()
+                                    .orEmpty()
+
+                            val raw =
+                                Regex(
+                                    "data-player-url\\s*=\\s*[\\\"']([^\\\"']+)[\\\"']",
+                                    RegexOption.IGNORE_CASE
+                                )
+                                    .find(html)
+                                    ?.groupValues
+                                    ?.getOrNull(1)
+
+                            if (
+                                raw.isNullOrBlank()
+                            ) {
+
+                                return fail(
+                                    "Could not find Telefe's live player URL."
+                                )
+                            }
+
+                            val streamUrl =
+                                Html.fromHtml(
+                                    raw,
+                                    Html.FROM_HTML_MODE_LEGACY
+                                ).toString()
+
+                            if (
+                                streamUrl.contains(
+                                    "dailymotion.com",
+                                    ignoreCase = true
+                                )
+                            ) {
+
+                                resolveDailymotion(
+                                    streamUrl
+                                )
+
+                            } else {
+
+                                tokenizeTelefe(
+                                    streamUrl
+                                )
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
     }
 
+    /*
+     * STEP 2
+     *
+     * Resolve Dailymotion.
+     *
+     * IMPORTANT:
+     * This uses the NORMAL HTTPS client.
+     */
     private fun resolveDailymotion(
         dailymotionUrl: String
     ) {
@@ -207,28 +356,27 @@ class MainActivity : Activity() {
             true
         )
 
-        val videoId = Regex(
-            """dailymotion\.com/(?:embed/)?(?:video|live)/([^_?/#]+)""",
-            RegexOption.IGNORE_CASE
-        )
-            .find(dailymotionUrl)
-            ?.groupValues
-            ?.getOrNull(1)
+        val videoId =
+            Regex(
+                """dailymotion\.com/(?:embed/)?(?:video|live)/([^_?/#]+)""",
+                RegexOption.IGNORE_CASE
+            )
+                .find(dailymotionUrl)
+                ?.groupValues
+                ?.getOrNull(1)
 
-        if (videoId.isNullOrBlank()) {
+        if (
+            videoId.isNullOrBlank()
+        ) {
+
             return fail(
                 "Could not determine the Dailymotion video ID.\n\n$dailymotionUrl"
             )
         }
 
         /*
-         * IMPORTANT:
-         *
-         * Telefe restricts this Dailymotion video to approved
-         * embedding sites.
-         *
-         * The embedder parameter tells Dailymotion that this
-         * playback originated from Telefe's live page.
+         * This embedder parameter is required for
+         * Telefe's Dailymotion playback.
          */
         val metadataUrl =
             "https://www.dailymotion.com/player/metadata/video/$videoId"
@@ -240,173 +388,135 @@ class MainActivity : Activity() {
                 )
                 .build()
 
-        val request = Request.Builder()
-            .url(metadataUrl)
-            .header(
-                "User-Agent",
-                USER_AGENT
-            )
-            .header(
-                "Referer",
-                "https://www.dailymotion.com/"
-            )
-            .header(
-                "Accept",
-                "*/*"
-            )
-            .header(
-                "x-cache-internal",
-                "true"
-            )
-            .header(
-                "x-cache-max-age",
-                "-1"
-            )
-            .header(
-                "Cookie",
-                "family_filter=off; ff=off"
-            )
-            .build()
+        val request =
+            Request.Builder()
+                .url(metadataUrl)
+                .header(
+                    "User-Agent",
+                    USER_AGENT
+                )
+                .header(
+                    "Referer",
+                    "https://www.dailymotion.com/"
+                )
+                .header(
+                    "Accept",
+                    "*/*"
+                )
+                .header(
+                    "x-cache-internal",
+                    "true"
+                )
+                .header(
+                    "x-cache-max-age",
+                    "-1"
+                )
+                .header(
+                    "Cookie",
+                    "family_filter=off; ff=off"
+                )
+                .build()
 
-        http.newCall(request).enqueue(
-            object : Callback {
+        /*
+         * NORMAL HTTPS validation here.
+         */
+        http.newCall(request)
+            .enqueue(
 
-                override fun onFailure(
-                    call: Call,
-                    e: IOException
-                ) {
-                    fail(
-                        "Dailymotion request failed.\n\n${e.message}"
-                    )
-                }
+                object : Callback {
 
-                override fun onResponse(
-                    call: Call,
-                    response: Response
-                ) {
-                    response.use {
+                    override fun onFailure(
+                        call: Call,
+                        e: IOException
+                    ) {
 
-                        val text =
-                            it.body?.string().orEmpty()
+                        fail(
+                            "Dailymotion request failed.\n\n${e.message}"
+                        )
+                    }
 
-                        if (!it.isSuccessful) {
-                            return fail(
-                                "Dailymotion HTTP ${it.code}\n\n$text"
-                            )
-                        }
+                    override fun onResponse(
+                        call: Call,
+                        response: Response
+                    ) {
 
-                        try {
+                        response.use {
 
-                            val json =
-                                JSONObject(text)
+                            val text =
+                                it.body
+                                    ?.string()
+                                    .orEmpty()
 
-                            /*
-                             * Dailymotion can return HTTP 200
-                             * while still putting an error
-                             * inside the JSON.
-                             */
-                            if (json.has("error")) {
-
-                                val error =
-                                    json.optJSONObject("error")
-
-                                val message =
-                                    error?.optString("message")
-                                        ?: error?.optString("raw_message")
-                                        ?: error?.toString()
-                                        ?: "Unknown Dailymotion error"
+                            if (
+                                !it.isSuccessful
+                            ) {
 
                                 return fail(
-                                    "Dailymotion returned an error:\n\n$message"
+                                    "Dailymotion HTTP ${it.code}\n\n$text"
                                 )
                             }
 
-                            val qualities =
-                                json.optJSONObject(
-                                    "qualities"
-                                )
-                                    ?: return fail(
-                                        "Dailymotion returned no video qualities."
+                            try {
+
+                                val json =
+                                    JSONObject(text)
+
+                                if (
+                                    json.has("error")
+                                ) {
+
+                                    val error =
+                                        json.optJSONObject(
+                                            "error"
+                                        )
+
+                                    val message =
+                                        error?.optString(
+                                            "message"
+                                        )
+                                            ?: error?.optString(
+                                                "raw_message"
+                                            )
+                                            ?: error?.toString()
+                                            ?: "Unknown Dailymotion error"
+
+                                    return fail(
+                                        "Dailymotion returned an error:\n\n$message"
+                                    )
+                                }
+
+                                val qualities =
+                                    json.optJSONObject(
+                                        "qualities"
+                                    )
+                                        ?: return fail(
+                                            "Dailymotion returned no video qualities."
+                                        )
+
+                                var hlsUrl:
+                                    String? =
+                                    null
+
+                                /*
+                                 * First try automatic HLS.
+                                 */
+                                val auto =
+                                    qualities.optJSONArray(
+                                        "auto"
                                     )
 
-                            var hlsUrl: String? = null
-
-                            /*
-                             * Prefer Dailymotion's automatic
-                             * HLS playlist when available.
-                             */
-                            val auto =
-                                qualities.optJSONArray(
-                                    "auto"
-                                )
-
-                            if (auto != null) {
-
-                                for (
-                                    i in 0 until auto.length()
+                                if (
+                                    auto != null
                                 ) {
-
-                                    val source =
-                                        auto.optJSONObject(i)
-                                            ?: continue
-
-                                    val url =
-                                        source.optString(
-                                            "url"
-                                        )
-
-                                    val type =
-                                        source.optString(
-                                            "type"
-                                        )
-
-                                    if (
-                                        url.startsWith("http") &&
-                                        (
-                                            url.contains(
-                                                ".m3u8",
-                                                ignoreCase = true
-                                            ) ||
-                                            type.contains(
-                                                "mpegurl",
-                                                ignoreCase = true
-                                            )
-                                        )
-                                    ) {
-                                        hlsUrl = url
-                                        break
-                                    }
-                                }
-                            }
-
-                            /*
-                             * If "auto" did not contain HLS,
-                             * search every available quality.
-                             */
-                            if (hlsUrl == null) {
-
-                                val keys =
-                                    qualities.keys()
-
-                                while (
-                                    keys.hasNext() &&
-                                    hlsUrl == null
-                                ) {
-
-                                    val key =
-                                        keys.next()
-
-                                    val array =
-                                        qualities.optJSONArray(
-                                            key
-                                        ) ?: continue
 
                                     for (
-                                        i in 0 until array.length()
+                                        i in 0 until auto.length()
                                     ) {
 
                                         val source =
-                                            array.optJSONObject(i)
+                                            auto.optJSONObject(
+                                                i
+                                            )
                                                 ?: continue
 
                                         val url =
@@ -420,7 +530,9 @@ class MainActivity : Activity() {
                                             )
 
                                         if (
-                                            url.startsWith("http") &&
+                                            url.startsWith(
+                                                "http"
+                                            ) &&
                                             (
                                                 url.contains(
                                                     ".m3u8",
@@ -432,41 +544,126 @@ class MainActivity : Activity() {
                                                 )
                                             )
                                         ) {
-                                            hlsUrl = url
+
+                                            hlsUrl =
+                                                url
+
                                             break
                                         }
                                     }
                                 }
-                            }
 
-                            if (hlsUrl == null) {
-                                return fail(
-                                    "Dailymotion metadata loaded, but no HLS stream was found."
+                                /*
+                                 * Search all other qualities if
+                                 * automatic did not contain HLS.
+                                 */
+                                if (
+                                    hlsUrl == null
+                                ) {
+
+                                    val keys =
+                                        qualities.keys()
+
+                                    while (
+                                        keys.hasNext() &&
+                                        hlsUrl == null
+                                    ) {
+
+                                        val key =
+                                            keys.next()
+
+                                        val array =
+                                            qualities.optJSONArray(
+                                                key
+                                            )
+                                                ?: continue
+
+                                        for (
+                                            i in 0 until array.length()
+                                        ) {
+
+                                            val source =
+                                                array.optJSONObject(
+                                                    i
+                                                )
+                                                    ?: continue
+
+                                            val url =
+                                                source.optString(
+                                                    "url"
+                                                )
+
+                                            val type =
+                                                source.optString(
+                                                    "type"
+                                                )
+
+                                            if (
+                                                url.startsWith(
+                                                    "http"
+                                                ) &&
+                                                (
+                                                    url.contains(
+                                                        ".m3u8",
+                                                        ignoreCase = true
+                                                    ) ||
+                                                    type.contains(
+                                                        "mpegurl",
+                                                        ignoreCase = true
+                                                    )
+                                                )
+                                            ) {
+
+                                                hlsUrl =
+                                                    url
+
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (
+                                    hlsUrl == null
+                                ) {
+
+                                    return fail(
+                                        "Dailymotion metadata loaded, but no HLS stream was found."
+                                    )
+                                }
+
+                                val finalUrl =
+                                    hlsUrl
+
+                                runOnUiThread {
+
+                                    startPlayer(
+                                        finalUrl,
+                                        true
+                                    )
+                                }
+
+                            } catch (
+                                e: Exception
+                            ) {
+
+                                fail(
+                                    "Could not parse Dailymotion metadata.\n\n" +
+                                        "${e.javaClass.simpleName}: ${e.message}"
                                 )
                             }
-
-                            val finalUrl = hlsUrl
-
-                            runOnUiThread {
-                                startPlayer(
-                                    finalUrl,
-                                    true
-                                )
-                            }
-
-                        } catch (e: Exception) {
-
-                            fail(
-                                "Could not parse Dailymotion metadata.\n\n" +
-                                "${e.javaClass.simpleName}: ${e.message}"
-                            )
                         }
                     }
                 }
-            }
-        )
+            )
     }
 
+    /*
+     * Telefe's non-Dailymotion fallback.
+     *
+     * This is also mitelefe.com, so it uses the
+     * Telefe-only HTTPS client.
+     */
     private fun tokenizeTelefe(
         streamUrl: String
     ) {
@@ -484,7 +681,8 @@ class MainActivity : Activity() {
                 )
                 .toString()
                 .toRequestBody(
-                    "application/json".toMediaType()
+                    "application/json"
+                        .toMediaType()
                 )
 
         val request =
@@ -509,76 +707,100 @@ class MainActivity : Activity() {
                 )
                 .build()
 
-        http.newCall(request).enqueue(
-            object : Callback {
+        telefeHttp
+            .newCall(request)
+            .enqueue(
 
-                override fun onFailure(
-                    call: Call,
-                    e: IOException
-                ) {
-                    fail(
-                        "Could not request the Telefe stream token."
-                    )
-                }
+                object : Callback {
 
-                override fun onResponse(
-                    call: Call,
-                    response: Response
-                ) {
-                    response.use {
+                    override fun onFailure(
+                        call: Call,
+                        e: IOException
+                    ) {
 
-                        val text =
-                            it.body
-                                ?.string()
-                                ?.trim()
-                                .orEmpty()
+                        fail(
+                            "Could not request the Telefe stream token.\n\n${e.message}"
+                        )
+                    }
 
-                        if (!it.isSuccessful) {
-                            return fail(
-                                "Telefe token HTTP ${it.code}\n\n$text"
-                            )
-                        }
+                    override fun onResponse(
+                        call: Call,
+                        response: Response
+                    ) {
 
-                        val hls =
-                            try {
+                        response.use {
 
-                                if (
-                                    text.startsWith("{")
-                                ) {
-                                    JSONObject(text)
-                                        .optString("url")
-                                } else {
-                                    text.trim('"')
-                                }
+                            val text =
+                                it.body
+                                    ?.string()
+                                    ?.trim()
+                                    .orEmpty()
 
-                            } catch (
-                                _: Exception
+                            if (
+                                !it.isSuccessful
                             ) {
-                                ""
+
+                                return fail(
+                                    "Telefe token HTTP ${it.code}\n\n$text"
+                                )
                             }
 
-                        if (
-                            !hls.startsWith("http") ||
-                            !hls.contains(
-                                ".m3u8",
-                                ignoreCase = true
-                            )
-                        ) {
-                            return fail(
-                                "Telefe returned an unexpected stream response."
-                            )
-                        }
+                            val hls =
+                                try {
 
-                        runOnUiThread {
-                            startPlayer(
-                                hls,
-                                false
-                            )
+                                    if (
+                                        text.startsWith(
+                                            "{"
+                                        )
+                                    ) {
+
+                                        JSONObject(
+                                            text
+                                        )
+                                            .optString(
+                                                "url"
+                                            )
+
+                                    } else {
+
+                                        text.trim(
+                                            '"'
+                                        )
+                                    }
+
+                                } catch (
+                                    _: Exception
+                                ) {
+
+                                    ""
+                                }
+
+                            if (
+                                !hls.startsWith(
+                                    "http"
+                                ) ||
+                                !hls.contains(
+                                    ".m3u8",
+                                    ignoreCase = true
+                                )
+                            ) {
+
+                                return fail(
+                                    "Telefe returned an unexpected stream response."
+                                )
+                            }
+
+                            runOnUiThread {
+
+                                startPlayer(
+                                    hls,
+                                    false
+                                )
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
     }
 
     private fun startPlayer(
@@ -607,7 +829,9 @@ class MainActivity : Activity() {
 
         val dataSource =
             DefaultHttpDataSource.Factory()
-                .setUserAgent(USER_AGENT)
+                .setUserAgent(
+                    USER_AGENT
+                )
                 .setDefaultRequestProperties(
                     headers
                 )
@@ -617,7 +841,9 @@ class MainActivity : Activity() {
 
         val mediaItem =
             MediaItem.Builder()
-                .setUri(hlsUrl)
+                .setUri(
+                    hlsUrl
+                )
                 .setMimeType(
                     MimeTypes.APPLICATION_M3U8
                 )
@@ -626,9 +852,10 @@ class MainActivity : Activity() {
         val source =
             HlsMediaSource.Factory(
                 dataSource
-            ).createMediaSource(
-                mediaItem
             )
+                .createMediaSource(
+                    mediaItem
+                )
 
         player =
             ExoPlayer.Builder(this)
@@ -639,6 +866,7 @@ class MainActivity : Activity() {
                         exo
 
                     exo.addListener(
+
                         object :
                             Player.Listener {
 
@@ -650,7 +878,10 @@ class MainActivity : Activity() {
                                     state ==
                                     Player.STATE_READY
                                 ) {
-                                    retryCount = 0
+
+                                    retryCount =
+                                        0
+
                                     showStatus(
                                         "",
                                         false
@@ -661,6 +892,7 @@ class MainActivity : Activity() {
                                     state ==
                                     Player.STATE_ENDED
                                 ) {
+
                                     retryLater()
                                 }
                             }
@@ -671,8 +903,8 @@ class MainActivity : Activity() {
 
                                 fail(
                                     "Player error:\n\n" +
-                                    "${error.errorCodeName}\n" +
-                                    "${error.message}"
+                                        "${error.errorCodeName}\n" +
+                                        "${error.message}"
                                 )
                             }
                         }
@@ -709,15 +941,19 @@ class MainActivity : Activity() {
 
         root.postDelayed(
             {
+
                 if (
                     !isFinishing &&
                     !isDestroyed
                 ) {
+
                     resolveAndPlay()
                 }
             },
             1500L *
-                retryCount.coerceAtMost(4)
+                retryCount.coerceAtMost(
+                    4
+                )
         )
     }
 
@@ -748,15 +984,21 @@ class MainActivity : Activity() {
                 if (
                     message.isBlank()
                 ) {
+
                     View.GONE
+
                 } else {
+
                     View.VISIBLE
                 }
 
             spinner.visibility =
                 if (loading) {
+
                     View.VISIBLE
+
                 } else {
+
                     View.GONE
                 }
         }
@@ -784,7 +1026,8 @@ class MainActivity : Activity() {
                 View.VISIBLE
             ) {
 
-                retryCount = 0
+                retryCount =
+                    0
 
                 resolveAndPlay()
 
@@ -798,12 +1041,16 @@ class MainActivity : Activity() {
     }
 
     override fun onResume() {
+
         super.onResume()
+
         player?.play()
     }
 
     override fun onPause() {
+
         player?.pause()
+
         super.onPause()
     }
 

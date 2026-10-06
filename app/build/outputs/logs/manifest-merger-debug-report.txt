@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
-INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-37:12
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-38:12
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-38:12
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-38:12
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:2:1-38:12
 MERGED from [androidx.media3:media3-ui:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/05ef3213b2498da8d9bf77de25ebb8bc/transformed/media3-ui-1.8.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.media3:media3-extractor:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/d608eb7cbe975ca56fdfb01db2f3a547/transformed/media3-extractor-1.8.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.media3:media3-container:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/6a1787ae7a66ee4d11af6690ec4c04c9/transformed/media3-container-1.8.0/AndroidManifest.xml:17:1-22:12
@@ -48,8 +48,8 @@ ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:10:5-12:36
 	android:name
 		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:11:9-52
 application
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-35:19
-INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-35:19
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-36:19
+INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:14:5-36:19
 MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:24:5-89
 MERGED from [androidx.core:core:1.8.0] /home/codespace/.gradle/caches/9.7.1/transforms/15737236d1ac1d8bf72e7febbffbefd7/transformed/core-1.8.0/AndroidManifest.xml:24:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codespace/.gradle/caches/9.7.1/transforms/8e169fcf294aae777cfda4fb87d00e56/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
@@ -67,31 +67,33 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/codes
 	android:banner
 		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:16:9-45
 	android:theme
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:19:9-40
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:20:9-40
+	android:networkSecurityConfig
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:19:9-69
 activity#com.pfservices.telefeshield.MainActivity
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:21:9-33:20
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:22:9-34:20
 	android:screenOrientation
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:25:13-50
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:26:13-50
 	android:exported
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:24:13-36
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:25:13-36
 	android:configChanges
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:23:13-94
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:24:13-94
 	android:name
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:22:13-41
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:23:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER+category:name:android.intent.category.LEANBACK_LAUNCHER
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:27:13-31:29
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:13-32:29
 action#android.intent.action.MAIN
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:17-69
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:17-69
 	android:name
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:28:25-66
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:17-77
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:17-77
 	android:name
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:29:27-74
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:27-74
 category#android.intent.category.LEANBACK_LAUNCHER
-ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:17-86
+ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:31:17-86
 	android:name
-		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:30:27-83
+		ADDED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml:31:27-83
 uses-sdk
 INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /workspaces/Telefe-Shield/app/src/main/AndroidManifest.xml

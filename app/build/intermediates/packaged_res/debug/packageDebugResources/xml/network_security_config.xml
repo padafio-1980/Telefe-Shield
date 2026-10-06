@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+
+    <!-- Keep Android's normal trusted certificates for everything -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Telefe: normal system CAs + DigiCert Global Root G2 bundled with app -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">mitelefe.com</domain>
+
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="@raw/digicert_global_root_g2" />
+        </trust-anchors>
+    </domain-config>
+
+</network-security-config>
